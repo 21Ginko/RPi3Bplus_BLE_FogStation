@@ -17,7 +17,7 @@ firebase_admin.initialize_app(cred)
 db = firestore.client()
 
 # Connect to the MongoDB container
-mongo_client = MongoClient("") #cAdd your own
+mongo_client = MongoClient("") #Change with your own
 
 # Access the database
 mongo_db = mongo_client["cocodb_local"]
