@@ -64,16 +64,18 @@ def process_and_send_data():
                             
                             if sensor.exists:
                                 # Create a new sensor reading
+                                user_last_sensor_reading_ref = db.collection("users").document(users[0]["UID"]).collection("last_sensor_readings").document(str(sensor_id))
+                               
                                 new_sensor_reading = {
                                     "created_at":firestore.SERVER_TIMESTAMP,
                                     "reading": reading,
+                                    "previous_reading": user_last_sensor_reading_ref.get().to_dict().get("reading"),
                                     "sensor_info": sensor.to_dict(),
                                     "timestamp": data["created_at"]
                                 }
                                 
                                 # Set the new sensor reading in the user's "last_sensor_readings" collection with the sensor's ID
-                                user_last_sensor_reading_ref = db.collection("users").document(users[0]["UID"]).collection("last_sensor_readings").document(str(sensor_id))
-                                user_last_sensor_reading_ref.set(new_sensor_reading)
+                                 user_last_sensor_reading_ref.set(new_sensor_reading)
                                 
                                 # Add the sensor reading to the user's "sensor_readings" collection
                                 user_sensor_readings_ref = db.collection("users").document(users[0]["UID"]).collection("sensor_readings")
